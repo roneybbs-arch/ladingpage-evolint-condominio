@@ -210,6 +210,70 @@
     position:relative; z-index:1;
   }
 
+  /* ── PORTFOLIO ── */
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+    margin-top: 48px;
+  }
+  .proj-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px 26px;
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: transform .3s, border-color .3s, box-shadow .3s;
+    text-decoration: none; color: inherit;
+  }
+  .proj-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at top right, rgba(14,165,234,.07) 0%, transparent 60%);
+    opacity: 0; transition: opacity .3s;
+  }
+  .proj-card:hover { transform: translateY(-5px); border-color: rgba(14,165,234,.4); box-shadow: 0 18px 50px rgba(0,0,0,.5); }
+  .proj-card:hover::before { opacity: 1; }
+
+  .proj-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+  .proj-emoji { font-size: 26px; flex-shrink: 0; }
+  .proj-arrow {
+    font-size: .8rem; color: var(--cyan); opacity: 0;
+    transition: opacity .25s, transform .25s;
+    transform: translateX(-4px);
+    margin-top: 4px; flex-shrink: 0;
+  }
+  .proj-card:hover .proj-arrow { opacity: 1; transform: translateX(0); }
+  .proj-card h3 {
+    font-family: 'Orbitron', monospace; font-weight: 600; font-size: .88rem;
+    letter-spacing: .02em; color: rgba(200,225,255,.95); margin-bottom: 8px;
+  }
+  .proj-card p { color: var(--muted); font-size: .83rem; line-height: 1.75; font-weight: 300; flex: 1; }
+  .proj-tag {
+    display: inline-block; margin-top: 16px;
+    background: rgba(14,165,234,.1); border: 1px solid rgba(14,165,234,.22);
+    color: rgba(80,200,240,.85); font-size: .66rem; letter-spacing: .1em;
+    text-transform: uppercase; padding: 4px 12px; border-radius: 50px; width: fit-content;
+  }
+
+  .portfolio-cta-row {
+    display: flex; justify-content: center; margin-top: 36px;
+  }
+  .btn-portfolio {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: transparent;
+    border: 1px solid rgba(14,165,234,.4);
+    color: var(--cyan);
+    font-family: 'Exo 2', sans-serif; font-weight: 500; font-size: .95rem;
+    padding: 14px 36px; border-radius: 60px; text-decoration: none;
+    transition: background .2s, border-color .2s, transform .2s, box-shadow .2s;
+  }
+  .btn-portfolio:hover {
+    background: rgba(14,165,234,.1); border-color: var(--cyan);
+    transform: translateY(-2px); box-shadow: 0 0 28px rgba(14,165,234,.2);
+  }
+
   /* ── STEPS ── */
   .steps-wrap {
     background:var(--surface); border:1px solid var(--border); border-radius:22px;
@@ -334,6 +398,7 @@
     </div>
   </a>
   <a href="https://wa.me/5511964308930" class="nav-cta">💬 WhatsApp</a>
+  <a href="#portfolio" class="btn-outline" style="padding:9px 20px;font-size:.8rem;border-radius:50px;">Portfólio</a>
 </header>
 
 <!-- HERO -->
@@ -352,7 +417,7 @@
   </h1>
   <div class="hero-actions">
     <a href="https://wa.me/5511964308930" class="btn-primary">🚀 Solicitar Orçamento</a>
-    <a href="#servicos" class="btn-outline">Ver Serviços ↓</a>
+    <a href="#portfolio" class="btn-outline">Ver Portfólio ↓</a>
   </div>
   <div class="hero-stats">
     <div>
@@ -397,6 +462,83 @@
       <div class="step"><div class="step-num">03</div><h4>Execução</h4><p>Realizo o serviço com atenção e qualidade profissional.</p></div>
       <div class="step"><div class="step-num">04</div><h4>Entrega</h4><p>Tudo funcionando, com suporte pós-entrega incluso.</p></div>
     </div>
+  </div>
+</section>
+
+<!-- PORTFÓLIO -->
+<section class="section" id="portfolio" style="padding-top:0">
+  <p class="s-label reveal">Portfólio</p>
+  <h2 class="s-title reveal">Projetos reais,<br>resultados reais</h2>
+  <p class="s-sub reveal">Uma amostra do que já desenvolvi — de ferramentas empresariais a produtos digitais.</p>
+
+  <div class="portfolio-grid">
+
+    <a href="https://audittrack-plus.lovable.app/dashboard" target="_blank" class="proj-card reveal">
+      <div class="proj-header">
+        <span class="proj-emoji">🔍</span>
+        <span class="proj-arrow">↗</span>
+      </div>
+      <h3>AuditPro</h3>
+      <p>Plataforma web de gestão de auditorias para redes de varejo com dashboard de KPIs, checklists e relatórios executivos.</p>
+      <span class="proj-tag">App Web · IA</span>
+    </a>
+
+    <a href="https://roneybbs-arch.github.io/Thalia-Trocas/" target="_blank" class="proj-card reveal">
+      <div class="proj-header">
+        <span class="proj-emoji">📦</span>
+        <span class="proj-arrow">↗</span>
+      </div>
+      <h3>Gestão de Trocas</h3>
+      <p>Sistema com 8.700+ registros e R$ 1M+ processado. Gestão de status, filtros avançados e exportação de dados.</p>
+      <span class="proj-tag">Sistema · Dashboard</span>
+    </a>
+
+    <a href="https://evofiscal.lovable.app/" target="_blank" class="proj-card reveal">
+      <div class="proj-header">
+        <span class="proj-emoji">🧮</span>
+        <span class="proj-arrow">↗</span>
+      </div>
+      <h3>Calculadora ICMS-ST</h3>
+      <p>Ferramenta de precificação fiscal com cálculo bidirecional, múltiplos regimes tributários e alíquotas por departamento.</p>
+      <span class="proj-tag">Ferramenta Fiscal</span>
+    </a>
+
+    <a href="https://www.meubolsoevolint.com/" target="_blank" class="proj-card reveal">
+      <div class="proj-header">
+        <span class="proj-emoji">💰</span>
+        <span class="proj-arrow">↗</span>
+      </div>
+      <h3>Meu Bolso Finança</h3>
+      <p>Aplicativo de finanças pessoais para o público brasileiro, com controle de gastos e planejamento financeiro.</p>
+      <span class="proj-tag">App · Finanças</span>
+    </a>
+
+    <a href="https://teal-service-flow.lovable.app" target="_blank" class="proj-card reveal">
+      <div class="proj-header">
+        <span class="proj-emoji">🎫</span>
+        <span class="proj-arrow">↗</span>
+      </div>
+      <h3>Evolint HelpDesk</h3>
+      <p>App de chamados de suporte com dashboard de KPIs, controle de SLA, painel técnico e histórico de atendimentos.</p>
+      <span class="proj-tag">Sistema · Suporte</span>
+    </a>
+
+    <a href="https://roneybbs-arch.github.io/Apurador-ICMS/" target="_blank" class="proj-card reveal">
+      <div class="proj-header">
+        <span class="proj-emoji">📊</span>
+        <span class="proj-arrow">↗</span>
+      </div>
+      <h3>Apurador Fiscal ICMS</h3>
+      <p>Sistema de apuração mensal de ICMS para 15 lojas. Importa NFs, cupons e devoluções — gera crédito x débito em segundos.</p>
+      <span class="proj-tag">Fiscal · Analytics</span>
+    </a>
+
+  </div>
+
+  <div class="portfolio-cta-row reveal">
+    <a href="https://roneybbs-arch.github.io/" target="_blank" class="btn-portfolio">
+      Ver portfólio completo ↗
+    </a>
   </div>
 </section>
 
