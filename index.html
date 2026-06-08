@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evolint — Tecnologia que transforma</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;900&family=Exo+2:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #050d1a;
+    --surface: #091425;
+    --surface2:#0d1c34;
+    --blue:    #1a5eff;
+    --cyan:    #0ea5ea;
+    --glow:    rgba(26,94,255,0.35);
+    --text:    #d8eaff;
+    --muted:   #6a90c0;
+    --border:  rgba(60,130,255,0.15);
+    --border2: rgba(60,130,255,0.28);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Exo 2', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* grid pattern */
+  body::after {
+    content:'';
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(rgba(26,94,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,94,255,0.04) 1px, transparent 1px);
+    background-size:80px 80px;
+    pointer-events:none; z-index:0;
+  }
+
+  /* ambient blobs */
+  .ambient { position:fixed; border-radius:50%; filter:blur(100px); pointer-events:none; z-index:0; animation:drift 14s ease-in-out infinite alternate; }
+  .amb1 { width:500px; height:500px; background:rgba(26,94,255,.12); top:-150px; right:-100px; }
+  .amb2 { width:350px; height:350px; background:rgba(14,165,234,.09); bottom:0; left:-80px; animation-delay:-5s; }
+  .amb3 { width:260px; height:260px; background:rgba(100,80,220,.08); top:40%; left:30%; animation-delay:-10s; }
+  @keyframes drift { from{transform:translate(0,0) scale(1)} to{transform:translate(30px,20px) scale(1.06)} }
+
+  .scan { position:fixed; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent 0%,rgba(0,200,255,.25) 50%,transparent 100%); pointer-events:none; z-index:1; animation:scanAnim 8s linear infinite; top:0; }
+  @keyframes scanAnim { from{top:-1px} to{top:100vh} }
+
+  /* ── HEADER ── */
+  header {
+    position:sticky; top:0; z-index:100;
+    padding:14px 5%;
+    display:flex; justify-content:space-between; align-items:center;
+    backdrop-filter:blur(20px);
+    background:rgba(5,13,26,.85);
+    border-bottom:1px solid var(--border);
+  }
+
+  .logo { display:flex; align-items:center; gap:12px; text-decoration:none; }
+  .logo-icon {
+    width:38px; height:38px;
+    background:linear-gradient(135deg,var(--blue),var(--cyan));
+    border-radius:9px; display:flex; align-items:center; justify-content:center;
+    font-size:18px; box-shadow:0 0 18px var(--glow); flex-shrink:0;
+  }
+  .logo-text {
+    font-family:'Orbitron',monospace; font-weight:700; font-size:1.1rem;
+    background:linear-gradient(135deg,#b0d0ff,#5ba3ff);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    letter-spacing:.05em;
+  }
+  .logo-sub { font-size:.62rem; letter-spacing:.18em; color:var(--muted); text-transform:uppercase; display:block; margin-top:1px; }
+
+  .nav-cta {
+    display:inline-flex; align-items:center; gap:7px;
+    background:linear-gradient(135deg,var(--blue),var(--cyan));
+    color:#fff; font-family:'Exo 2',sans-serif;
+    font-weight:600; font-size:.82rem;
+    padding:10px 22px; border-radius:50px; text-decoration:none;
+    box-shadow:0 0 18px var(--glow);
+    transition:transform .2s, box-shadow .2s;
+    white-space:nowrap;
+  }
+  .nav-cta:hover { transform:translateY(-2px); box-shadow:0 0 32px var(--glow); }
+
+  /* ── SECTION ── */
+  .section { padding:70px 5%; position:relative; z-index:1; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height:92vh; display:flex; flex-direction:column;
+    justify-content:center; padding:90px 5% 60px;
+    position:relative; z-index:1;
+  }
+
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:9px;
+    background:rgba(26,94,255,.1); border:1px solid rgba(60,130,255,.3);
+    color:rgba(140,200,255,.9); font-size:.75rem; font-weight:500;
+    padding:7px 16px; border-radius:50px;
+    letter-spacing:.09em; text-transform:uppercase; width:fit-content;
+    margin-bottom:28px; animation:fadeUp .8s ease both;
+  }
+  .live-dot { width:7px; height:7px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); animation:livePulse 1.5s ease infinite; }
+  @keyframes livePulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+  .hero-brand {
+    font-family:'Orbitron',monospace; font-weight:900;
+    font-size:clamp(3.2rem, 14vw, 8rem);
+    letter-spacing:-.02em; line-height:1;
+    background:linear-gradient(135deg,#c0d8ff 0%,#5ba3ff 40%,#a0c4ff 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    filter:drop-shadow(0 0 28px rgba(80,160,255,.5));
+    animation:fadeUp .8s .1s ease both;
+  }
+  .hero-tagline {
+    font-size:clamp(.72rem,2.5vw,.95rem);
+    letter-spacing:.25em; color:var(--muted); text-transform:uppercase;
+    margin-top:8px; animation:fadeUp .8s .15s ease both;
+  }
+  .hero-sep { width:240px; height:1px; background:linear-gradient(90deg,transparent,rgba(80,160,255,.5),transparent); margin:32px 0; animation:fadeUp .8s .2s ease both; }
+
+  .hero h1 {
+    font-family:'Exo 2',sans-serif; font-weight:300;
+    font-size:clamp(1.25rem,4vw,2.4rem);
+    line-height:1.5; max-width:640px; color:rgba(200,225,255,.9);
+    animation:fadeUp .8s .25s ease both;
+  }
+  .hero h1 strong { color:#fff; font-weight:600; }
+
+  .hero-actions { display:flex; gap:14px; flex-wrap:wrap; margin-top:38px; animation:fadeUp .8s .35s ease both; }
+
+  .btn-primary {
+    display:inline-flex; align-items:center; gap:9px;
+    background:linear-gradient(135deg,var(--blue),var(--cyan)); color:#fff;
+    font-family:'Exo 2',sans-serif; font-weight:600; font-size:.95rem;
+    padding:15px 32px; border-radius:60px; text-decoration:none;
+    box-shadow:0 0 28px var(--glow);
+    transition:transform .2s, box-shadow .2s;
+  }
+  .btn-primary:hover { transform:translateY(-3px); box-shadow:0 0 48px var(--glow); }
+
+  .btn-outline {
+    display:inline-flex; align-items:center; gap:9px;
+    background:transparent; color:var(--text);
+    border:1px solid var(--border2); font-family:'Exo 2',sans-serif;
+    font-weight:400; font-size:.95rem;
+    padding:15px 32px; border-radius:60px; text-decoration:none;
+    transition:background .2s, border-color .2s, transform .2s;
+  }
+  .btn-outline:hover { background:rgba(26,94,255,.08); border-color:rgba(80,160,255,.5); transform:translateY(-3px); }
+
+  .hero-stats { display:flex; gap:36px; flex-wrap:wrap; margin-top:52px; animation:fadeUp .8s .45s ease both; }
+  .stat-num { font-family:'Orbitron',monospace; font-weight:700; font-size:1.9rem; color:#fff; }
+  .stat-num span { color:var(--cyan); }
+  .stat-label { font-size:.75rem; color:var(--muted); margin-top:4px; letter-spacing:.04em; }
+
+  /* ── LABELS ── */
+  .s-label { font-size:.7rem; font-weight:500; letter-spacing:.18em; text-transform:uppercase; color:var(--cyan); margin-bottom:12px; }
+  .s-title {
+    font-family:'Orbitron',monospace; font-weight:700;
+    font-size:clamp(1.3rem,4vw,2.1rem); letter-spacing:-.02em;
+    background:linear-gradient(135deg,#d0e8ff,#7ab8ff);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; line-height:1.25;
+  }
+  .s-sub { color:var(--muted); font-size:.9rem; line-height:1.8; font-weight:300; max-width:500px; margin-top:12px; }
+
+  /* ── SERVICES GRID ── */
+  .services-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin-top:48px; }
+
+  .svc-card {
+    background:var(--surface); border:1px solid var(--border); border-radius:18px;
+    padding:30px 26px; position:relative; overflow:hidden;
+    transition:transform .3s, border-color .3s, box-shadow .3s; cursor:default;
+  }
+  .svc-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg,transparent,var(--blue),var(--cyan),transparent);
+    opacity:0; transition:opacity .3s;
+  }
+  .svc-card::after {
+    content:''; position:absolute; inset:0;
+    background:radial-gradient(circle at top left,rgba(26,94,255,.06) 0%,transparent 60%);
+    opacity:0; transition:opacity .3s;
+  }
+  .svc-card:hover { transform:translateY(-5px); border-color:rgba(60,130,255,.4); box-shadow:0 18px 48px rgba(0,0,0,.5); }
+  .svc-card:hover::before, .svc-card:hover::after { opacity:1; }
+
+  .svc-icon {
+    width:48px; height:48px; border-radius:12px;
+    background:rgba(26,94,255,.12); border:1px solid rgba(60,130,255,.2);
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px; margin-bottom:18px; position:relative; z-index:1;
+  }
+  .svc-card h3 {
+    font-family:'Orbitron',monospace; font-weight:600; font-size:.9rem;
+    letter-spacing:.02em; color:rgba(200,225,255,.95); margin-bottom:9px;
+    position:relative; z-index:1;
+  }
+  .svc-card p { color:var(--muted); font-size:.85rem; line-height:1.75; font-weight:300; position:relative; z-index:1; }
+  .svc-tag {
+    display:inline-block; margin-top:16px;
+    background:rgba(26,94,255,.12); border:1px solid rgba(60,130,255,.25);
+    color:rgba(100,180,255,.8); font-size:.68rem; letter-spacing:.1em;
+    text-transform:uppercase; padding:4px 13px; border-radius:50px;
+    position:relative; z-index:1;
+  }
+
+  /* ── STEPS ── */
+  .steps-wrap {
+    background:var(--surface); border:1px solid var(--border); border-radius:22px;
+    padding:50px 5%; margin-top:70px; position:relative; overflow:hidden;
+  }
+  .steps-wrap::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg,transparent,var(--blue),var(--cyan),var(--blue),transparent);
+  }
+  .steps-grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:28px; margin-top:44px; position:relative;
+  }
+  .steps-grid::before {
+    content:''; position:absolute; top:30px; left:8%; right:8%; height:1px;
+    background:linear-gradient(90deg,transparent,rgba(60,130,255,.3),transparent);
+  }
+  @media(max-width:640px){ .steps-grid::before{display:none} }
+
+  .step { text-align:center; }
+  .step-num {
+    width:58px; height:58px; border-radius:50%;
+    background:var(--surface2); border:1px solid rgba(60,130,255,.3);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Orbitron',monospace; font-weight:700; font-size:1rem; color:var(--cyan);
+    margin:0 auto 16px; position:relative; z-index:1;
+    box-shadow:0 0 18px rgba(14,165,234,.15);
+  }
+  .step h4 { font-family:'Orbitron',monospace; font-weight:600; font-size:.84rem; color:rgba(200,225,255,.9); margin-bottom:7px; letter-spacing:.03em; }
+  .step p { color:var(--muted); font-size:.82rem; line-height:1.7; font-weight:300; }
+
+  /* ── CTA STRIP ── */
+  .cta-strip {
+    margin:70px 0; background:linear-gradient(135deg,#0a2050 0%,#0d3080 50%,#072040 100%);
+    border:1px solid rgba(60,130,255,.3); border-radius:22px;
+    padding:60px 5%; text-align:center; position:relative; overflow:hidden;
+  }
+  .cta-strip::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at center,rgba(26,94,255,.22) 0%,transparent 70%); }
+  .cta-strip::after { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(80,160,255,.7),transparent); }
+  .cta-strip h2 { font-family:'Orbitron',monospace; font-weight:700; font-size:clamp(1.2rem,4vw,2rem); color:#fff; position:relative; letter-spacing:-.01em; line-height:1.3; }
+  .cta-strip p { margin-top:12px; font-size:.95rem; color:rgba(160,210,255,.8); font-weight:300; position:relative; }
+  .cta-strip .btn-primary { margin-top:32px; font-size:1rem; padding:18px 44px; position:relative; }
+
+  /* ── TECH ── */
+  .tech-cloud { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-top:38px; }
+  .tech-tag {
+    background:var(--surface); border:1px solid var(--border); color:var(--muted);
+    font-size:.8rem; padding:8px 16px; border-radius:50px;
+    transition:border-color .2s, color .2s, background .2s;
+  }
+  .tech-tag:hover { border-color:var(--cyan); color:var(--cyan); background:rgba(14,165,234,.08); }
+
+  /* ── CONTACT ── */
+  .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:36px; align-items:start; margin-top:48px; }
+  @media(max-width:680px){ .contact-grid{grid-template-columns:1fr} }
+
+  .contact-link {
+    display:flex; align-items:center; gap:16px;
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    padding:20px 22px; text-decoration:none; color:var(--text); margin-bottom:13px;
+    transition:border-color .2s, transform .2s, box-shadow .2s;
+  }
+  .contact-link:hover { border-color:rgba(60,130,255,.5); transform:translateX(4px); box-shadow:0 8px 28px rgba(0,0,0,.3); }
+  .contact-icon { width:44px; height:44px; flex-shrink:0; border-radius:11px; background:rgba(26,94,255,.12); border:1px solid rgba(60,130,255,.2); display:flex; align-items:center; justify-content:center; font-size:20px; }
+  .contact-info small { font-size:.7rem; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; display:block; margin-bottom:3px; }
+  .contact-info strong { font-size:.95rem; font-weight:500; }
+
+  .region-card {
+    background:var(--surface); border:1px solid var(--border); border-radius:18px;
+    padding:32px; position:relative; overflow:hidden;
+  }
+  .region-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--blue),var(--cyan)); }
+  .region-card h3 { font-family:'Orbitron',monospace; font-weight:600; font-size:.92rem; color:rgba(200,225,255,.95); margin-bottom:14px; letter-spacing:.03em; }
+  .region-card p { color:var(--muted); font-size:.88rem; line-height:1.9; font-weight:300; }
+  .region-card .hl { color:var(--cyan); font-weight:500; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding:34px 5%; border-top:1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:14px; position:relative; z-index:1;
+  }
+  footer p { font-size:.75rem; color:var(--muted); }
+
+  .bottom-bar { height:3px; background:linear-gradient(90deg,var(--blue),var(--cyan),#7b5ef8,var(--blue)); background-size:200%; animation:barSlide 4s linear infinite; }
+  @keyframes barSlide{from{background-position:0%}to{background-position:200%}}
+
+  /* ── REVEAL ── */
+  .reveal { opacity:0; transform:translateY(26px); transition:opacity .65s ease, transform .65s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ── RESPONSIVE PATCHES ── */
+  @media(max-width:480px){
+    .hero { padding:80px 5% 50px; }
+    .hero-stats { gap:22px; }
+    header { padding:12px 4%; }
+    .logo-sub { display:none; }
+    .section { padding:55px 4%; }
+    .steps-wrap { padding:40px 4%; }
+    .cta-strip { padding:50px 4%; }
+    .hero-actions { flex-direction:column; }
+    .btn-primary, .btn-outline { justify-content:center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient amb1"></div>
+<div class="ambient amb2"></div>
+<div class="ambient amb3"></div>
+<div class="scan"></div>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" href="#">
+    <div class="logo-icon">⚡</div>
+    <div>
+      <div class="logo-text">EVOLINT</div>
+      <span class="logo-sub">por Roney Braga</span>
+    </div>
+  </a>
+  <a href="https://wa.me/5511964308930" class="nav-cta">💬 WhatsApp</a>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <div class="live-dot"></div>
+    Morador do condomínio · Atendimento presencial e remoto
+  </div>
+  <div class="hero-brand">EVOLINT</div>
+  <div class="hero-tagline">Estratégia · Automação · Crescimento</div>
+  <div class="hero-sep"></div>
+  <h1>
+    <strong>Sites, aplicativos e ferramentas com IA</strong><br>
+    + reparo e upgrade de computadores,<br>
+    <span style="color:var(--muted);font-weight:300;">com atendimento próximo e preço justo.</span>
+  </h1>
+  <div class="hero-actions">
+    <a href="https://wa.me/5511964308930" class="btn-primary">🚀 Solicitar Orçamento</a>
+    <a href="#servicos" class="btn-outline">Ver Serviços ↓</a>
+  </div>
+  <div class="hero-stats">
+    <div>
+      <div class="stat-num">10<span>+</span></div>
+      <div class="stat-label">Anos de experiência</div>
+    </div>
+    <div>
+      <div class="stat-num">100<span>%</span></div>
+      <div class="stat-label">Compromisso & qualidade</div>
+    </div>
+    <div>
+      <div class="stat-num">48<span>h</span></div>
+      <div class="stat-label">Prazo médio de entrega</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section class="section" id="servicos">
+  <p class="s-label reveal">O que eu faço</p>
+  <h2 class="s-title reveal">Soluções completas<br>em tecnologia</h2>
+  <p class="s-sub reveal">Do desenvolvimento digital ao suporte técnico presencial.</p>
+
+  <div class="services-grid">
+    <div class="svc-card reveal"><div class="svc-icon">🌐</div><h3>Sites & Landing Pages</h3><p>Sites modernos, responsivos e rápidos para seu negócio, portfólio ou serviço.</p><span class="svc-tag">Dev Web</span></div>
+    <div class="svc-card reveal"><div class="svc-icon">📱</div><h3>Apps & Sistemas</h3><p>Aplicações web, ferramentas de gestão e automações sob medida.</p><span class="svc-tag">Desenvolvimento</span></div>
+    <div class="svc-card reveal"><div class="svc-icon">🤖</div><h3>Ferramentas com IA</h3><p>Chatbots, automações, análise de dados e geradores com Inteligência Artificial.</p><span class="svc-tag">Inovação & IA</span></div>
+    <div class="svc-card reveal"><div class="svc-icon">🔧</div><h3>Reparo de Computadores</h3><p>Conserto de notebooks e desktops, vírus, formatação e limpeza.</p><span class="svc-tag">Suporte Técnico</span></div>
+    <div class="svc-card reveal"><div class="svc-icon">⚡</div><h3>Upgrade de Peças</h3><p>HD para SSD, mais RAM, nova tela — mais velocidade com custo real.</p><span class="svc-tag">Hardware</span></div>
+    <div class="svc-card reveal"><div class="svc-icon">📊</div><h3>Planilhas & Relatórios</h3><p>Excel avançado, dashboards e relatórios automatizados para seu negócio.</p><span class="svc-tag">Produtividade</span></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" style="padding-top:0">
+  <div class="steps-wrap reveal">
+    <p class="s-label" style="text-align:center">Como funciona</p>
+    <h2 class="s-title" style="text-align:center;max-width:100%">Simples, rápido e sem enrolação</h2>
+    <div class="steps-grid">
+      <div class="step"><div class="step-num">01</div><h4>Você me chama</h4><p>Manda mensagem no WhatsApp contando o que precisa.</p></div>
+      <div class="step"><div class="step-num">02</div><h4>Orçamento</h4><p>Resposta rápida com proposta clara e sem pegadinhas.</p></div>
+      <div class="step"><div class="step-num">03</div><h4>Execução</h4><p>Realizo o serviço com atenção e qualidade profissional.</p></div>
+      <div class="step"><div class="step-num">04</div><h4>Entrega</h4><p>Tudo funcionando, com suporte pós-entrega incluso.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section" style="padding-top:0;padding-bottom:0">
+  <div class="cta-strip reveal">
+    <h2>Computador travando?<br>Ideia de app ou site?</h2>
+    <p>Atendo moradores do condomínio com preço justo e compromisso real.</p>
+    <a href="https://wa.me/5511964308930" class="btn-primary">💬 Falar agora no WhatsApp</a>
+  </div>
+</section>
+
+<!-- TECH -->
+<section class="section" style="text-align:center">
+  <p class="s-label reveal">Stack & ferramentas</p>
+  <h2 class="s-title reveal" style="max-width:100%">Tecnologias que domino</h2>
+  <div class="tech-cloud reveal">
+    <span class="tech-tag">HTML & CSS</span><span class="tech-tag">JavaScript</span>
+    <span class="tech-tag">React</span><span class="tech-tag">Python</span>
+    <span class="tech-tag">Node.js</span><span class="tech-tag">Excel Avançado</span>
+    <span class="tech-tag">SQL</span><span class="tech-tag">Inteligência Artificial</span>
+    <span class="tech-tag">WordPress</span><span class="tech-tag">APIs & Automações</span>
+    <span class="tech-tag">Windows & macOS</span><span class="tech-tag">Hardware PC/Notebook</span>
+    <span class="tech-tag">Redes & Wi-Fi</span><span class="tech-tag">Google Workspace</span>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section class="section" id="contato">
+  <p class="s-label reveal">Contato</p>
+  <h2 class="s-title reveal">Bora resolver juntos?</h2>
+  <p class="s-sub reveal">Atendimento rápido, preço justo e trabalho sério.</p>
+
+  <div class="contact-grid">
+    <div>
+      <a href="https://wa.me/5511964308930" class="contact-link reveal">
+        <div class="contact-icon">💬</div>
+        <div class="contact-info"><small>WhatsApp (preferencial)</small><strong>(11) 96430-8930</strong></div>
+      </a>
+      <a href="mailto:roneybbs@gmail.com" class="contact-link reveal">
+        <div class="contact-icon">📧</div>
+        <div class="contact-info"><small>E-mail</small><strong>roneybbs@gmail.com</strong></div>
+      </a>
+    </div>
+    <div class="region-card reveal">
+      <h3>📍 Atendimento presencial</h3>
+      <p>
+        Faço <span class="hl">visitas no condomínio e região</span> para hardware, suporte técnico e configurações.<br><br>
+        Para projetos digitais, atendimento <span class="hl">100% remoto</span>.<br><br>
+        <strong>Horários flexíveis</strong>, incluindo fins de semana mediante agendamento.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div style="width:34px;height:34px;background:linear-gradient(135deg,var(--blue),var(--cyan));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px">⚡</div>
+    <div>
+      <div style="font-family:'Orbitron',monospace;font-weight:700;font-size:.95rem;background:linear-gradient(135deg,#b0d0ff,#5ba3ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">EVOLINT</div>
+      <div style="font-size:.62rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase">por Roney Braga</div>
+    </div>
+  </div>
+  <p>Tecnologia acessível para quem é seu vizinho.</p>
+  <p>© 2025 · Evolint</p>
+</footer>
+<div class="bottom-bar"></div>
+
+<script>
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const siblings = [...e.target.parentElement.querySelectorAll('.reveal:not(.visible)')];
+      if (siblings.includes(e.target)) {
+        siblings.forEach((el, i) => setTimeout(() => el.classList.add('visible'), i * 80));
+      } else {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior:'smooth', block:'start' }); }
+    });
+  });
+</script>
+</body>
+</html>
